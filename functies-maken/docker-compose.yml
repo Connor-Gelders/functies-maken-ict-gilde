@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  php:
+    build: .
+    container_name: php-container
+    volumes:
+      - ./src:/var/www/html
+    expose:
+      - 9000  # Deze poort wordt gebruikt door de PHP-FPM service
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-container
+    ports:
+      - "9090:80"  # Verbind poort 9090 op je host naar poort 80 in de container
+    volumes:
+      - ./src:/var/www/html
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
